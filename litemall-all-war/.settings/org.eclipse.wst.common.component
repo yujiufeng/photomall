@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="litemall">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <dependent-module archiveName="litemall-core-0.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/litemall-core/litemall-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="litemall-db-0.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/litemall-db/litemall-db">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="litemall-wx-api-0.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/litemall-wx-api/litemall-wx-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="litemall-admin-api-0.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/litemall-admin-api/litemall-admin-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="litemall"/>
+        <property name="java-output-path" value="/litemall-all-war/build/classes"/>
+    </wb-module>
+</project-modules>
