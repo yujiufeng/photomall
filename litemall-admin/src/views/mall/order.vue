@@ -39,6 +39,7 @@
       <el-table-column align="center" label="操作" width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button v-permission="['GET /admin/order/detail']" type="primary" size="mini" @click="handleDetail(scope.row)">详情</el-button>
+          <el-button v-permission="['GET /admin/order/photo']" type="primary" size="mini" @click="handlePhoto(scope.row)">查看照片</el-button>
           <el-button v-permission="['POST /admin/order/delete']" type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
           <el-button v-if="scope.row.orderStatus==201" v-permission="['POST /admin/order/ship']" type="primary" size="mini" @click="handleShip(scope.row)">发货</el-button>
           <el-button v-if="scope.row.orderStatus==202||scope.row.orderStatus==204" v-permission="['POST /admin/order/refund']" type="primary" size="mini" @click="handleRefund(scope.row)">退款</el-button>
@@ -118,42 +119,46 @@
       </span>
     </el-dialog>
 
-    <!-- 发货对话框 -->
-    <el-dialog :visible.sync="shipDialogVisible" title="发货">
-      <el-form ref="shipForm" :model="shipForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="快递公司" prop="shipChannel">
-          <el-select v-model="shipForm.shipChannel" placeholder="请选择">
-            <el-option v-for="item in channels" :key="item.code" :label="item.name" :value="item.code" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="快递编号" prop="shipSn">
-          <el-input v-model="shipForm.shipSn" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="shipDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmShip">确定</el-button>
-      </div>
+    <el-dialog :visible.sync="photoDialogVisible" title="订单照片详情" width="800">
+
     </el-dialog>
 
-    <!-- 退款对话框 -->
-    <el-dialog :visible.sync="refundDialogVisible" title="退款">
-      <el-form ref="refundForm" :model="refundForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="退款金额" prop="refundMoney">
-          <el-input v-model="refundForm.refundMoney" :disabled="true" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="refundDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmRefund">确定</el-button>
-      </div>
-    </el-dialog>
+    <!-- 发货对话框 -->
+    <el-dialog :visible.sync="shipDialogVisible" title="发货">
+    <el-form ref="shipForm" :model="shipForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form-item label="快递公司" prop="shipChannel">
+        <el-select v-model="shipForm.shipChannel" placeholder="请选择">
+          <el-option v-for="item in channels" :key="item.code" :label="item.name" :value="item.code" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="快递编号" prop="shipSn">
+        <el-input v-model="shipForm.shipSn" />
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="shipDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmShip">确定</el-button>
+    </div>
+  </el-dialog>
+
+  <!-- 退款对话框 -->
+  <el-dialog :visible.sync="refundDialogVisible" title="退款">
+    <el-form ref="refundForm" :model="refundForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form-item label="退款金额" prop="refundMoney">
+        <el-input v-model="refundForm.refundMoney" :disabled="true" />
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="refundDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmRefund">确定</el-button>
+    </div>
+  </el-dialog>
 
   </div>
 </template>
 
 <script>
-import { detailOrder, listOrder, listChannel, refundOrder, deleteOrder, shipOrder } from '@/api/order'
+import { detailOrder, detailPhoto, listOrder, listChannel, refundOrder, deleteOrder, shipOrder } from '@/api/order'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -221,6 +226,7 @@ export default {
       },
       statusMap,
       orderDialogVisible: false,
+      photoDialogVisible: false,
       orderDetail: {
         order: {},
         user: {},
@@ -238,7 +244,8 @@ export default {
       },
       refundDialogVisible: false,
       downloadLoading: false,
-      channels: []
+      channels: [],
+      photoList: []
     }
   },
   created() {
@@ -281,6 +288,12 @@ export default {
         this.orderDetail = response.data.data
       })
       this.orderDialogVisible = true
+    },
+    handlePhoto(row) {
+      detailPhoto(row.id).then(response => {
+        this.photoList = response.data.data.list
+      })
+      this.photoDialogVisible = true
     },
     handleShip(row) {
       this.shipForm.orderId = row.id

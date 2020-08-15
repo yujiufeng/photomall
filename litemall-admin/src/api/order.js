@@ -20,6 +20,14 @@ export function detailOrder(id) {
   })
 }
 
+export function detailPhoto(id) {
+  return request({
+    url: '/order/photo',
+    method: 'get',
+    params: { id }
+  })
+}
+
 export function shipOrder(data) {
   return request({
     url: '/order/ship',

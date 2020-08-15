@@ -486,29 +486,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/photo',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'photoManage',
-    meta: {
-      title: '照片管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'user',
-        component: () => import('@/views/stat/user'),
-        name: 'statUser',
-        meta: {
-          perms: ['GET /admin/stat/user'],
-          title: '照片管理',
-          noCache: true
-        }
-      }
-    ]
-  },
-  {
     path: '/sys',
     component: Layout,
     redirect: 'noredirect',
