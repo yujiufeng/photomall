@@ -63,16 +63,22 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/catalog/catalog",
-        "iconPath": "static/images/category.png",
-        "selectedIconPath": "static/images/category@selected.png",
-        "text": "分类"
+        "pagePath": "pages/coupon/coupon",
+        "iconPath": "static/images/coupon.png",
+        "selectedIconPath": "static/images/coupon.png",
+        "text": "优惠券"
       },
       {
         "pagePath": "pages/cart/cart",
         "iconPath": "static/images/cart.png",
         "selectedIconPath": "static/images/cart@selected.png",
         "text": "购物车"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "iconPath": "static/images/about.png",
+        "selectedIconPath": "static/images/about.png",
+        "text": "联系我"
       },
       {
         "pagePath": "pages/ucenter/index/index",
