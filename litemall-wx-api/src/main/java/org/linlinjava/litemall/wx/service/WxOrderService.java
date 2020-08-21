@@ -577,7 +577,7 @@ public class WxOrderService {
 
         LitemallUser user = userService.findById(userId);
         String openid = user.getWeixinOpenid();
-        if (openid == null) {
+        if (openid == null||"".equals(openid)||"null".equalsIgnoreCase(openid)) {
             return ResponseUtil.fail(AUTH_OPENID_UNACCESS, "订单不能支付");
         }
         WxPayMpOrderResult result = null;
