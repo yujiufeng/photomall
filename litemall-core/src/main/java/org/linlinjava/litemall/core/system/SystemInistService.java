@@ -49,11 +49,11 @@ class SystemInistService {
         DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_ORDER_UNCONFIRM, "7");
         DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_ORDER_COMMENT, "7");
         // 商城相关配置默认值
-        DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_NAME, "litemall");
-        DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_ADDRESS, "上海");
+        DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_NAME, "照片商城");
+        DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_ADDRESS, "济南");
         DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_Latitude, "31.201900");
         DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_LONGITUDE, "121.587839");
-        DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_PHONE, "021-xxxx-xxxx");
+        DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_PHONE, "0531-xxxx-xxxx");
         DEFAULT_CONFIGS.put(SystemConfig.LITEMALL_MALL_QQ, "705144434");
     }
 
