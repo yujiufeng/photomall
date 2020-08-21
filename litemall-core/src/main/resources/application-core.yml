@@ -1,8 +1,8 @@
 litemall:
   # 开发者应该设置成自己的wx相关信息
   wx:
-    app-id: wxa5b486c6b918ecfb
-    app-secret: e04004829d4c383b4db7769d88dfbca1
+    app-id: wx08c8c47439033d68
+    app-secret: 0c149d3689f305f07597d6e5dd2759be
     mch-id: 111111
     mch-key: xxxxxx
     notify-url: http://www.example.com/wx/order/pay-notify
@@ -14,12 +14,12 @@ litemall:
   notify:
     mail:
       # 邮件通知配置,邮箱一般用于接收业务通知例如收到新的订单，sendto 定义邮件接收者，通常为商城运营人员
-      enable: false
-      host: smtp.exmail.qq.com
-      username: ex@ex.com.cn
-      password: XXXXXXXXXXXXX
-      sendfrom: ex@ex.com.cn
-      sendto: ex@qq.com
+      enable: true
+      host: smtp.163.com
+      username: yujiufeng87@163.com
+      password: hezhili
+      sendfrom: yujiufeng87@163.com
+      sendto: 343462886@qq.com
       port: 465
     # 短消息模版通知配置
     # 短信息用于通知客户，例如发货短信通知，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
@@ -48,9 +48,9 @@ litemall:
 
   # 快鸟物流查询配置
   express:
-    enable: false
-    appId: "XXXXXXXXX"
-    appKey: "XXXXXXXXXXXXXXXXXXXXXXXXX"
+    enable: true
+    appId: "1664543"
+    appKey: "c9341457-16fe-4a79-93e1-b309685feffc"
     vendors:
     - code: "ZTO"
       name: "中通快递"
