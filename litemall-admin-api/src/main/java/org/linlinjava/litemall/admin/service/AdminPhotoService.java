@@ -36,7 +36,7 @@ public class AdminPhotoService {
     }
 
     public String download(String orderSn) throws Exception{
-    	String basePath = environment.getProperty("litemall.photo.base.path");
+    	String basePath = environment.getProperty("photo.base.path");
     	String msg = "";
     	List<LitemallOrderPhoto> photoList = litemallOrderPhotoService.getPhotoList(orderSn);
     	if(null==photoList||photoList.size()==0) {
