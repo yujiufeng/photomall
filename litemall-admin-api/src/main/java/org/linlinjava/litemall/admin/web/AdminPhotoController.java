@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.admin.service.AdminPhotoService;
+import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,10 @@ public class AdminPhotoController {
      * @return
      */
     @RequiresPermissions("admin:order:list")
-    @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "查询")
+    @RequiresPermissionsDesc(menu = {"订单管理", "订单管理"}, button = "查询")
     @GetMapping("/list")
-    public Object list(Integer userId, String orderSn) {
-        //return adminPhotoService.list(userId, orderSn);
-    	return null;
+    public Object list(String orderSn) {
+        return adminPhotoService.list(orderSn);
     }
     
     /**
@@ -41,11 +41,20 @@ public class AdminPhotoController {
      * @return
      */
     @RequiresPermissions("admin:order:list")
-    @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "查询")
-    @GetMapping("/download")
+    @RequiresPermissionsDesc(menu = {"订单管理", "订单管理"}, button = "查询")
+    @PostMapping("/download")
     public Object download(String orderSn) {
-        //return adminPhotoService.download(orderSn);
-    	return null;
+    	Object result = ResponseUtil.ok();
+    	try {
+    		String msg = adminPhotoService.download(orderSn);
+    		if(!"".equals(msg)) {
+    			result = ResponseUtil.fail(-1, msg);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.fail();
+		}
+    	return result;
     }
 
     /**
@@ -54,13 +63,18 @@ public class AdminPhotoController {
      * @param orderSn
      * @return 操作结果
      */
-    @RequiresPermissions("admin:order:delete")
-    @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单删除")
+    @RequiresPermissions("admin:order:list")
+    @RequiresPermissionsDesc(menu = {"订单管理", "订单管理"}, button = "查询")
     @PostMapping("/delete")
-    public Object delete(String orderSn) {
-        //return adminPhotoService.delete(orderSn);
-    	return null;
+    public Object delete(String id) {
+    	Object result = ResponseUtil.ok();
+    	try {
+    		adminPhotoService.delete(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = ResponseUtil.fail();
+		}
+    	return result;
     }
-
     
 }
