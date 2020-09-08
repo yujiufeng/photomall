@@ -107,3 +107,8 @@ litemall:
       accessKey: 111111
       secretKey: xxxxxx
       bucketName: litemall
+  # 订单照片根路径
+  photo:
+    base:
+      path: /home/photomall/photo
+      #path: E:\photo
