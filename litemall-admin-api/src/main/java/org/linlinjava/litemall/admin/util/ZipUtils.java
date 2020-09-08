@@ -15,8 +15,9 @@ public class ZipUtils {
      * @param zipFilePath    压缩后文件存储路径
      * @param zipFilename    压缩文件名
      */
-    public static void compressToZip(String sourceFilePath, String zipFilePath, String zipFilename) {
-        File sourceFile = new File(sourceFilePath);
+    public static String compressToZip(String sourceFilePath, String zipFilePath, String zipFilename) {
+    	String msg = "";
+    	File sourceFile = new File(sourceFilePath);
         File zipPath = new File(zipFilePath);
         if (!zipPath.exists()) {
             zipPath.mkdirs();
@@ -25,9 +26,11 @@ public class ZipUtils {
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
             writeZip(sourceFile, "", zos);
         } catch (Exception e) {
+        	msg = "后台服务异常，原因是:"+e.getMessage();
             e.printStackTrace();
             throw new RuntimeException(e.getMessage(), e.getCause());
         }
+        return msg;
     }
     
     /**

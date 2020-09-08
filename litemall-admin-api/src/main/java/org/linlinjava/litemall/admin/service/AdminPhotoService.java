@@ -42,7 +42,7 @@ public class AdminPhotoService {
     	if(null==photoList||photoList.size()==0) {
     		msg = "无法下载，该订单下暂无照片";
     	}else {
-    		ZipUtils.compressToZip(basePath+File.separator+orderSn, basePath+"/zip", orderSn+".zip");
+    		msg = ZipUtils.compressToZip(basePath+File.separator+orderSn, basePath+"/zip", orderSn+".zip");
     	}
     	return msg;
     }
