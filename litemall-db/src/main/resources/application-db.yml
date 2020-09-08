@@ -23,4 +23,15 @@ spring:
       test-while-idle:  true
       time-between-eviction-runs-millis:  60000
       filters:  stat,wall
-
+  jpa:
+    database: MYSQL
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  jackson:
+    serialization:
+      indent_output: true
