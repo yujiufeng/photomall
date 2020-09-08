@@ -169,6 +169,16 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: 'brand',
+        component: () => import('@/views/mall/brand'),
+        name: 'brand',
+        meta: {
+          perms: ['GET /admin/brand/list', 'POST /admin/brand/create', 'GET /admin/brand/read', 'POST /admin/brand/update', 'POST /admin/brand/delete'],
+          title: '品牌制造商',
+          noCache: true
+        }
+      },
+      {
         path: 'category',
         component: () => import('@/views/mall/category'),
         name: 'category',
@@ -230,20 +240,10 @@ export const asyncRoutes = [
     alwaysShow: true,
     name: 'mallManage',
     meta: {
-      title: '商城管理',
+      title: '订单管理',
       icon: 'chart'
     },
     children: [
-      {
-        path: 'brand',
-        component: () => import('@/views/mall/brand'),
-        name: 'brand',
-        meta: {
-          perms: ['GET /admin/brand/list', 'POST /admin/brand/create', 'GET /admin/brand/read', 'POST /admin/brand/update', 'POST /admin/brand/delete'],
-          title: '品牌制造商',
-          noCache: true
-        }
-      },
       {
         path: 'order',
         component: () => import('@/views/mall/order'),

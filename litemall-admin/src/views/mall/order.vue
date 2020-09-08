@@ -119,46 +119,70 @@
       </span>
     </el-dialog>
 
-    <el-dialog :visible.sync="photoDialogVisible" title="订单照片详情" width="800">
+    <el-dialog :visible.sync="photoDialogVisible" title="订单照片详情" width="85%">
+      <el-table v-loading="photoListLoading" :data="photoList" element-loading-text="正在查询中。。。" border fit highlight-current-row>
+        <el-table-column align="center" label="照片名称" prop="name" />
+        <el-table-column align="center" label="尺寸" prop="size" />
+        <el-table-column align="center" label="数量" prop="total" />
+        <el-table-column align="center" label="订单编号" prop="orderSn" min-width="100" />
+        <el-table-column align="center" label="用户名" prop="userName" />
+        <el-table-column align="center" label="上传时间" prop="create_time" />
+        <el-table-column align="center" label="操作" width="250" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="handlePreviewPhoto(scope.row)">预览</el-button>
+            <el-button type="danger" size="mini" @click="handleDeletePhoto(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button :loading="downloadPhotoLoading" type="primary" icon="el-icon-download" @click="handleDownloadPhoto">打包下载</el-button>
+        <el-button @click="photoDialogVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
 
+    <el-dialog :visible.sync="photoDialogPreviewVisible" title="订单照片详情" width="85%">
+      <img class="img" width="100%" :src="photoPreviewUrl">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="photoDialogPreviewVisible = false">取 消</el-button>
+      </span>
     </el-dialog>
 
     <!-- 发货对话框 -->
     <el-dialog :visible.sync="shipDialogVisible" title="发货">
-    <el-form ref="shipForm" :model="shipForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-      <el-form-item label="快递公司" prop="shipChannel">
-        <el-select v-model="shipForm.shipChannel" placeholder="请选择">
-          <el-option v-for="item in channels" :key="item.code" :label="item.name" :value="item.code" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="快递编号" prop="shipSn">
-        <el-input v-model="shipForm.shipSn" />
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="shipDialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="confirmShip">确定</el-button>
-    </div>
-  </el-dialog>
+      <el-form ref="shipForm" :model="shipForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="快递公司" prop="shipChannel">
+          <el-select v-model="shipForm.shipChannel" placeholder="请选择">
+            <el-option v-for="item in channels" :key="item.code" :label="item.name" :value="item.code" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="快递编号" prop="shipSn">
+          <el-input v-model="shipForm.shipSn" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="shipDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmShip">确定</el-button>
+      </div>
+    </el-dialog>
 
-  <!-- 退款对话框 -->
-  <el-dialog :visible.sync="refundDialogVisible" title="退款">
-    <el-form ref="refundForm" :model="refundForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-      <el-form-item label="退款金额" prop="refundMoney">
-        <el-input v-model="refundForm.refundMoney" :disabled="true" />
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="refundDialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="confirmRefund">确定</el-button>
-    </div>
-  </el-dialog>
+    <!-- 退款对话框 -->
+    <el-dialog :visible.sync="refundDialogVisible" title="退款">
+      <el-form ref="refundForm" :model="refundForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="退款金额" prop="refundMoney">
+          <el-input v-model="refundForm.refundMoney" :disabled="true" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="refundDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmRefund">确定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
 
 <script>
-import { detailOrder, detailPhoto, listOrder, listChannel, refundOrder, deleteOrder, shipOrder } from '@/api/order'
+import { detailOrder, listPhoto, deletePhoto, downloadPhoto, listOrder, listChannel, refundOrder, deleteOrder, shipOrder } from '@/api/order'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -197,6 +221,7 @@ export default {
         sort: 'add_time',
         order: 'desc'
       },
+
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -227,6 +252,8 @@ export default {
       statusMap,
       orderDialogVisible: false,
       photoDialogVisible: false,
+      photoDialogPreviewVisible: false,
+      photoPreviewUrl: '',
       orderDetail: {
         order: {},
         user: {},
@@ -245,7 +272,11 @@ export default {
       refundDialogVisible: false,
       downloadLoading: false,
       channels: [],
-      photoList: []
+      photoList: [],
+      photoTotal: 0,
+      photoListLoading: true,
+      downloadPhotoLoading: false,
+      tempOrderSn: undefined
     }
   },
   created() {
@@ -290,11 +321,83 @@ export default {
       this.orderDialogVisible = true
     },
     handlePhoto(row) {
-      detailPhoto(row.id).then(response => {
+      this.tempOrderSn = row.orderSn
+      this.photoListLoading = true
+      listPhoto(row.orderSn).then(response => {
         this.photoList = response.data.data.list
+        this.photoTotal = response.data.data.total
+        this.photoListLoading = false
+      }).catch(() => {
+        this.photoList = []
+        this.photoTotal = 0
+        this.photoListLoading = false
       })
       this.photoDialogVisible = true
     },
+    getPhotoList() {
+      this.photoListLoading = true
+      listPhoto(this.tempOrderSn)
+        .then(response => {
+          this.photoList = response.data.data.list
+          this.photoTotal = response.data.data.total
+          this.photoListLoading = false
+        })
+        .catch(() => {
+          this.photoList = []
+          this.photoTotal = 0
+          this.photoListLoading = false
+        })
+    },
+    handlePreviewPhoto(row) {
+      this.photoDialogPreviewVisible = true
+      this.photoPreviewUrl = row.preview
+    },
+    handleDeletePhoto(row) {
+      if (confirm('确定要删除吗') === true) {
+        deletePhoto(row.id)
+          .then(response => {
+            this.$notify.success({
+              title: '提示',
+              message: response.data.errmsg
+            })
+            this.getPhotoList()
+          })
+          .catch(response => {
+            this.$notify.error({
+              title: '提示',
+              message: response.data.errmsg
+            })
+          })
+      }
+    },
+
+    handleDownloadPhoto() {
+      this.downloadPhotoLoading = true
+      downloadPhoto(this.tempOrderSn)
+        .then(response => {
+          if (response.data.errno != '0') {
+            this.$notify.error({
+              title: '提示',
+              message: response.data.errmsg
+            })
+            this.downloadPhotoLoading = false
+          } else {
+            // 开始下载
+            this.downloadPhotoLoading = false
+            const a = document.createElement('a')
+            a.href = '/ophoto/zip/' + this.tempOrderSn + '.zip'
+            a.click()
+          }
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg
+          })
+          this.downloadPhotoLoading = false
+        })
+    },
+
     handleShip(row) {
       this.shipForm.orderId = row.id
       this.shipForm.shipChannel = row.shipChannel

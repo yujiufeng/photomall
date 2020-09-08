@@ -20,11 +20,25 @@ export function detailOrder(id) {
   })
 }
 
-export function detailPhoto(id) {
+export function listPhoto(id) {
   return request({
-    url: '/order/photo',
+    url: '/photo/list',
     method: 'get',
+    params: { orderSn: id }
+  })
+}
+export function deletePhoto(id) {
+  return request({
+    url: '/photo/delete',
+    method: 'post',
     params: { id }
+  })
+}
+export function downloadPhoto(id) {
+  return request({
+    url: '/photo/download',
+    method: 'post',
+    params: { orderSn: id }
   })
 }
 
