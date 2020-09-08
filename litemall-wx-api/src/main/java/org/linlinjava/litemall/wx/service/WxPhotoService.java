@@ -23,7 +23,7 @@ public class WxPhotoService {
     private LitemallOrderPhotoService litemallOrderPhotoService;
     
     public Object upload(LitemallOrderPhoto entity) throws Exception{
-    	String basePath = environment.getProperty("litemall.photo.base.path");
+    	String basePath = environment.getProperty("photo.base.path");
     	Object msg = ResponseUtil.ok();
     	//此处开始写上传照片的逻辑，分两步：1.把文件上传至服务器指定目录，2.向表里插入一条数据
     	
