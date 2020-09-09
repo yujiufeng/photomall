@@ -21,15 +21,17 @@ public class LitemallOrderPhoto implements Serializable {
 	
 	private String name;
 	
-	private Integer size;
+	private Integer number;
 	
-	private Integer total;
+	private Integer goodsId;
+	
+	private String goodsName;
+	
+	private Integer productId;
+	
+	private Integer orderId;
 	
 	private String orderSn;
-	
-	private Integer userId;
-	
-	private String userName;
 	
 	private String path;
 	
@@ -58,22 +60,49 @@ public class LitemallOrderPhoto implements Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "SIZE")
-	public Integer getSize() {
-		return size;
+	@Column(name = "NUMBER")
+	public Integer getNumber() {
+		return number;
 	}
 
-	public void setSize(Integer size) {
-		this.size = size;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 
-	@Column(name = "TOTAL")
-	public Integer getTotal() {
-		return total;
+	@Column(name = "GOODS_ID")
+	public Integer getGoodsId() {
+		return goodsId;
 	}
 
-	public void setTotal(Integer total) {
-		this.total = total;
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
+	}
+
+	@Column(name = "GOODS_NAME")
+	public String getGoodsName() {
+		return goodsName;
+	}
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+
+	@Column(name = "PRODUCT_ID")
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	@Column(name = "ORDER_ID")
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 
 	@Column(name = "ORDER_SN")
@@ -85,30 +114,11 @@ public class LitemallOrderPhoto implements Serializable {
 		this.orderSn = orderSn;
 	}
 
-	@Column(name = "USERID")
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	@Column(name = "USERNAME")
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
 	@Column(name = "PATH")
 	public String getPath() {
 		return path;
 	}
 
-	
 	public void setPath(String path) {
 		this.path = path;
 	}
