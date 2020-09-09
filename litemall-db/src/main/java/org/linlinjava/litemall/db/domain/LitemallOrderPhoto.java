@@ -1,6 +1,7 @@
 package org.linlinjava.litemall.db.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -37,7 +38,7 @@ public class LitemallOrderPhoto implements Serializable {
 	
 	private String preview;
 	
-	private Date create_time;
+	private LocalDateTime create_time;
 
 	@Id
 	@GenericGenerator(name="systemUUID",strategy="uuid")
@@ -133,11 +134,11 @@ public class LitemallOrderPhoto implements Serializable {
 	}
 
 	@Column(name = "CREATE_TIME")
-	public Date getCreate_time() {
+	public LocalDateTime getCreate_time() {
 		return create_time;
 	}
 
-	public void setCreate_time(Date create_time) {
+	public void setCreate_time(LocalDateTime create_time) {
 		this.create_time = create_time;
 	}
 }
