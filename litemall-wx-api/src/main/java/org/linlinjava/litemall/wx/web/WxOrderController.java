@@ -7,8 +7,6 @@ import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
 import org.linlinjava.litemall.db.domain.LitemallOrderPhoto;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
-import org.linlinjava.litemall.wx.dto.UserInfo;
-import org.linlinjava.litemall.wx.service.UserInfoService;
 import org.linlinjava.litemall.wx.service.WxOrderService;
 import org.linlinjava.litemall.wx.service.WxPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,9 +33,6 @@ public class WxOrderController {
     
     @Autowired
     private WxPhotoService wxPhotoService;
-    
-    @Autowired
-    private UserInfoService userInfoService;
     
     @Autowired
     private Environment environment;
@@ -238,7 +232,7 @@ public class WxOrderController {
             entity.setOrderSn(orderSn);
             entity.setPath(filePath + File.separator + fileName);
             entity.setPreview("/ophoto/"+orderSn+"/"+fileName);
-            entity.setCreate_time(new Date());
+            entity.setCreate_time(LocalDateTime.now());
             wxPhotoService.upload(entity);
             file.transferTo(dest);
         } catch (Exception e) {
