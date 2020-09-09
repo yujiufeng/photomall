@@ -122,10 +122,9 @@
     <el-dialog :visible.sync="photoDialogVisible" title="订单照片详情" width="85%">
       <el-table v-loading="photoListLoading" :data="photoList" element-loading-text="正在查询中。。。" border fit highlight-current-row>
         <el-table-column align="center" label="照片名称" prop="name" />
-        <el-table-column align="center" label="尺寸" prop="size" />
-        <el-table-column align="center" label="数量" prop="total" />
+        <el-table-column align="center" label="商品名称" prop="goodsName" />
+        <el-table-column align="center" label="数量" prop="number" />
         <el-table-column align="center" label="订单编号" prop="orderSn" min-width="100" />
-        <el-table-column align="center" label="用户名" prop="userName" />
         <el-table-column align="center" label="上传时间" prop="create_time" />
         <el-table-column align="center" label="操作" width="250" class-name="small-padding fixed-width">
           <template slot-scope="scope">
