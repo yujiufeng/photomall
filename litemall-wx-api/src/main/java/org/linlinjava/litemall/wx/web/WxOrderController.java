@@ -2,14 +2,24 @@ package org.linlinjava.litemall.wx.web;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
+import org.linlinjava.litemall.db.domain.LitemallOrderPhoto;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
+import org.linlinjava.litemall.wx.dto.UserInfo;
+import org.linlinjava.litemall.wx.service.UserInfoService;
 import org.linlinjava.litemall.wx.service.WxOrderService;
 import org.linlinjava.litemall.wx.service.WxPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.File;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +36,12 @@ public class WxOrderController {
     
     @Autowired
     private WxPhotoService wxPhotoService;
+    
+    @Autowired
+    private UserInfoService userInfoService;
+    
+    @Autowired
+    private Environment environment;
 
     /**
      * 订单列表
@@ -57,6 +73,7 @@ public class WxOrderController {
      */
     @GetMapping("detail")
     public Object detail(@LoginUser Integer userId, @NotNull Integer orderId) {
+    	logger.info("userId=="+userId);
         return wxOrderService.detail(userId, orderId);
     }
 
@@ -184,6 +201,51 @@ public class WxOrderController {
     @PostMapping("comment")
     public Object comment(@LoginUser Integer userId, @RequestBody String body) {
         return wxOrderService.comment(userId, body);
+    }
+    
+    /**
+     * 上传照片
+     *
+     * @param userId 用户ID
+     * @return 操作结果
+     */
+    @PostMapping("upload")
+    public Object upload(HttpServletRequest request, MultipartFile file) {
+    	String goodsId = request.getParameter("goodsId");
+    	String goodsName= request.getParameter("goodsName");
+    	String productId = request.getParameter("productId");
+    	String orderId = request.getParameter("orderId");
+    	String orderSn = request.getParameter("orderSn");
+    	String photoNum = request.getParameter("photoNum");
+    	
+    	// 获取上传的文件
+        String filePath = environment.getProperty("photo.base.path")+File.separator+orderSn;
+        File newPath =new File(filePath); 
+        if(!newPath.exists()&&!newPath.isDirectory()){       
+        	newPath.mkdirs();    
+        }
+        
+        String fileName = photoNum+"_"+file.getOriginalFilename();
+        File dest = new File(filePath + File.separator + fileName);
+        try {
+        	LitemallOrderPhoto entity = new LitemallOrderPhoto();
+            entity.setName(fileName);
+            entity.setNumber(Integer.valueOf(photoNum));
+            entity.setGoodsId(Integer.valueOf(goodsId));
+            entity.setGoodsName(goodsName);
+            entity.setProductId(Integer.valueOf(productId));
+            entity.setOrderId(Integer.valueOf(orderId));
+            entity.setOrderSn(orderSn);
+            entity.setPath(filePath + File.separator + fileName);
+            entity.setPreview("/ophoto/"+orderSn+"/"+fileName);
+            entity.setCreate_time(new Date());
+            wxPhotoService.upload(entity);
+            file.transferTo(dest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.fail();
+        }
+        return ResponseUtil.ok();
     }
 
 }
